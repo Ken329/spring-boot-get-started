@@ -4,12 +4,12 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.List;
-import java.util.Objects;
 
 @SpringBootApplication
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api")
 public class GetStartedApplication {
 
 	public static void main(String[] args) {
@@ -21,24 +21,26 @@ public class GetStartedApplication {
 	//		return String.format("Hello %s!", name);
 	//	}
 	
-	private List<String> users = new ArrayList<>();
+	final private List<String> users = new ArrayList<>();
 
+	@RequestMapping(path = "/users", method = RequestMethod.GET)
 	@GetMapping
 	public List<String> getAllUsers() {
 		return users;
 	}
 
-	@PostMapping
-	public String createUser(@RequestBody String user) {
-		users.add(user);
-		return "User created: " + user;
+	@RequestMapping(path = "/user", method = RequestMethod.POST)
+	public String createUser(@RequestBody Map<String, String> user) {
+		System.out.println(user.get("name"));
+		users.add(user.get("name"));
+		return "User created: " + user.get("name");
 	}
 
-	@DeleteMapping("/{user}")
-	public String deleteUser(@PathVariable String user) {
-		if(users.contains(user)) {
-			users.remove(user);
-			return "User deleted: " + user;
+	@RequestMapping(path = "/user/{username}", method = RequestMethod.DELETE)
+	public String deleteUser(@PathVariable String username) {
+		if(users.contains(username)) {
+			users.remove(username);
+			return "User deleted: " + username;
 		}
 		return "User not found";
 	}
