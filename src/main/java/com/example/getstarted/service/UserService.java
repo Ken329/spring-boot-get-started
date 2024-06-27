@@ -33,17 +33,18 @@ public class UserService {
 //    }
 
     public String deleteUserById(@PathVariable String id){
-        boolean found = false;
-        for(int i=0; i<dataUser.size(); i++){
-            System.out.println(dataUser.get(i).toString());
+        int removeIndex = -1;
+        for(int i = 0; i < dataUser.size(); i+=1){
             if(dataUser.get(i).getId().equals(id)){
-                dataUser.remove(i);
-                found = true;
+                removeIndex = i;
             }
         }
-        if(found){
+
+        if(removeIndex >= 0){
+            dataUser.remove(removeIndex);
             return "User with id " + id + " was deleted";
         }
+
         return "User not found";
     }
 }
